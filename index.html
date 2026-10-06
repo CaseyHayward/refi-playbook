@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refinance Savings Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column; numbered follow-up timeline, tabbed scripts, side-by-side calculator */
+:root {
+  --bg: #F6F8F7; --surface: #FFFFFF; --ink: #15211D; --muted: #55635E;
+  --line: #D9E1DE; --accent: #1F6B52; --accent-soft: #E3F0EA; --warn: #9A5B12;
+  --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F1513; --surface: #17201D; --ink: #E7EEEB; --muted: #9AABA5;
+  --line: #2A3632; --accent: #5FC39E; --accent-soft: #1C2E27; --warn: #E2A35A; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0F1513; --surface: #17201D; --ink: #E7EEEB; --muted: #9AABA5;
+  --line: #2A3632; --accent: #5FC39E; --accent-soft: #1C2E27; --warn: #E2A35A; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); padding: 0 16px }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 48px 72px; display: grid; gap: 56px }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 0 }
+h1 { font-size: clamp(2.1rem, 6vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em }
+h2 { font-size: 1.6rem; font-weight: 800 }
+h3 { font-size: 1.1rem; font-weight: 600 }
+p { margin: 0; max-width: 65ch }
+.eyebrow { font: 600 0.78rem/1 var(--f-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) }
+section { display: grid; gap: 20px }
+.lede { color: var(--muted); font-size: 1.12rem }
+header { display: grid; gap: 16px }
+.stat { display: flex; flex-wrap: wrap; gap: 12px 28px; padding-top: 8px }
+.stat div { display: grid }
+.stat b { font: 500 1.5rem var(--f-mono); color: var(--accent) }
+.stat span { color: var(--muted); font-size: 0.9rem }
+
+/* timeline */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 }
+.steps li { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line) }
+.steps li:last-child { border-bottom: 1px solid var(--line) }
+.when { font: 500 0.9rem var(--f-mono); color: var(--accent); padding-top: 2px }
+.steps p { color: var(--muted) }
+.steps h3 { margin-bottom: 4px }
+
+/* tabs + templates */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px }
+.tabs button { font: 600 0.95rem var(--f-body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg) }
+.panel { display: grid; gap: 14px }
+.tpl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 10px; min-width: 0 }
+.tpl-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap }
+.tpl pre { margin: 0; white-space: pre-wrap; font: 1rem/1.55 var(--f-body); color: var(--ink) }
+.copy { font: 600 0.85rem var(--f-body); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer }
+.copy:hover { background: var(--accent-soft) }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.note { font-size: 0.92rem; color: var(--muted) }
+
+/* objections */
+details { border-top: 1px solid var(--line); padding: 14px 0 }
+details:last-of-type { border-bottom: 1px solid var(--line) }
+summary { cursor: pointer; font: 600 1.05rem var(--f-display); list-style-position: outside }
+details p { margin-top: 10px; color: var(--muted) }
+details p q { color: var(--ink) }
+
+/* calculator */
+.calc { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px }
+.fields { display: grid; gap: 14px; min-width: 0 }
+.fields label { display: grid; gap: 4px; font-weight: 600; font-size: 0.92rem }
+.fields input, .fields select { font: 500 1rem var(--f-mono); padding: 9px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100% }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.results { display: grid; gap: 0; align-content: start; min-width: 0 }
+.res { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line) }
+.res span { color: var(--muted) }
+.res b { font: 500 1.05rem var(--f-mono); font-variant-numeric: tabular-nums; text-align: right }
+.big { background: var(--accent-soft); border-radius: 8px; padding: 16px; margin-bottom: 8px; display: grid; gap: 2px }
+.big span { color: var(--muted); font-size: 0.9rem }
+.big b { font: 500 2rem var(--f-mono); color: var(--accent); font-variant-numeric: tabular-nums }
+.verdict { margin-top: 14px; font-weight: 600 }
+.verdict.warn { color: var(--warn) }
+footer { color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--line); padding-top: 20px }
+@media (max-width: 520px) { .steps li { grid-template-columns: 1fr; gap: 4px } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section id="calculator">
+    <header><div class="eyebrow">Canada · Mortgage refinance</div>
+    <h1>Refinance Savings Calculator</h1>
+    <p class="lede">See what refinancing could save you each month, what it costs to break your current mortgage, and how long until it pays for itself. The numbers below are an example; enter your own.</p></header>
+    <div class="calc">
+      <form class="fields" id="calc-form">
+        <label for="bal">Mortgage balance ($)<input id="bal" type="number" inputmode="decimal" value="420000" min="0" step="1000"></label>
+        <div class="row2">
+          <label for="cur">Current rate (%)<input id="cur" type="number" inputmode="decimal" value="5.29" step="0.01"></label>
+          <label for="new">New rate (%)<input id="new" type="number" inputmode="decimal" value="4.19" step="0.01"></label>
+        </div>
+        <div class="row2">
+          <label for="amort">Years left (amortization)<input id="amort" type="number" inputmode="numeric" value="22" min="1" max="30"></label>
+          <label for="months">Months left in term<input id="months" type="number" inputmode="numeric" value="20" min="0" max="120"></label>
+        </div>
+        <label for="type">Current mortgage type
+          <select id="type"><option value="fixed">Fixed</option><option value="variable">Variable</option></select></label>
+        <label for="cmp" id="cmp-label">Lender's rate for remaining term (%), for the IRD estimate<input id="cmp" type="number" inputmode="decimal" value="4.49" step="0.01"></label>
+        <label for="fees">Legal and appraisal fees ($)<input id="fees" type="number" inputmode="decimal" value="1500" step="100"></label>
+      </form>
+      <div class="results" aria-live="polite">
+        <div class="big"><span>Monthly savings</span><b id="r-save">–</b></div>
+        <div class="res"><span>Current payment</span><b id="r-old">–</b></div>
+        <div class="res"><span>New payment</span><b id="r-new">–</b></div>
+        <div class="res"><span>Estimated penalty</span><b id="r-pen">–</b></div>
+        <div class="res"><span>Total cost to switch</span><b id="r-cost">–</b></div>
+        <div class="res"><span>Break-even</span><b id="r-be">–</b></div>
+        <div class="res"><span>Net savings over 5 years</span><b id="r-5y">–</b></div>
+        <p class="verdict" id="r-verdict"></p>
+      </div>
+    </div>
+    <p class="note">These are estimates only. Fixed-rate payments use Canadian semi-annual compounding. The penalty shown is the higher of 3 months' interest or a simple IRD estimate, and actual lender penalties vary. Always confirm the exact penalty with the current lender.</p>
+  </section>
+  <footer>Want exact numbers? A mortgage broker can confirm your penalty and today's rates at no cost.</footer>
+</div>
+
+<script>
+// Calculator
+const $ = id => document.getElementById(id);
+const num = id => parseFloat($(id).value) || 0;
+const money = n => (n < 0 ? '−' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('en-CA');
+
+function payment(principal, annualPct, years, fixed) {
+  const n = years * 12;
+  if (principal <= 0 || n <= 0) return 0;
+  const r = annualPct / 100;
+  // Canadian fixed: compounded semi-annually; variable: compounded monthly
+  const i = fixed ? Math.pow(1 + r / 2, 1 / 6) - 1 : r / 12;
+  if (i === 0) return principal / n;
+  return principal * i / (1 - Math.pow(1 + i, -n));
+}
+
+function calc() {
+  const bal = num('bal'), cur = num('cur'), nw = num('new'), yrs = num('amort');
+  const months = num('months'), fees = num('fees'), cmp = num('cmp');
+  const fixed = $('type').value === 'fixed';
+  $('cmp-label').hidden = !fixed;
+
+  const oldPmt = payment(bal, cur, yrs, fixed);
+  const newPmt = payment(bal, nw, yrs, true);
+  const save = oldPmt - newPmt;
+  const threeMonths = bal * (cur / 100) * 3 / 12;
+  const ird = Math.max(0, bal * ((cur - cmp) / 100) * months / 12);
+  const pen = months <= 0 ? 0 : (fixed ? Math.max(threeMonths, ird) : threeMonths);
+  const cost = pen + fees;
+  const be = save > 0 ? Math.ceil(cost / save) : Infinity;
+
+  $('r-save').textContent = money(save);
+  $('r-old').textContent = money(oldPmt);
+  $('r-new').textContent = money(newPmt);
+  $('r-pen').textContent = money(pen) + (fixed && months > 0 ? (ird > threeMonths ? ' (IRD)' : ' (3 mo.)') : '');
+  $('r-cost').textContent = money(cost);
+  $('r-be').textContent = isFinite(be) ? be + ' months' : 'Never';
+  $('r-5y').textContent = money(save * 60 - cost);
+
+  const v = $('r-verdict');
+  if (!isFinite(be)) { v.textContent = 'At these rates the new payment is not lower. Look at debt consolidation or wait for renewal.'; v.className = 'verdict warn'; }
+  else if (be <= 24) { v.textContent = 'The savings cover the cost in ' + be + ' months. This one is worth a conversation.'; v.className = 'verdict'; }
+  else { v.textContent = 'Break-even takes over 2 years. Consider waiting until closer to renewal.'; v.className = 'verdict warn'; }
+}
+$('calc-form').addEventListener('input', calc);
+$('calc-form').addEventListener('submit', e => e.preventDefault());
+calc();
+</script>
+</body>
+</html>
