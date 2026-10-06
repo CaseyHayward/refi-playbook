@@ -2,177 +2,385 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Refinance Savings Calculator</title>
+<meta name="description" content="See what refinancing your mortgage could save you each month, what it costs to break your current mortgage, and when it pays for itself.">
+<meta property="og:title" content="Refinance Savings Calculator">
+<meta property="og:description" content="Find out in 30 seconds whether refinancing your mortgage is worth it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: single reading column; numbered follow-up timeline, tabbed scripts, side-by-side calculator */
+/* Layout: navy masthead band carrying the headline result; white calculator sheet overlapping it; break-even chart; lead form */
 :root {
-  --bg: #F6F8F7; --surface: #FFFFFF; --ink: #15211D; --muted: #55635E;
-  --line: #D9E1DE; --accent: #1F6B52; --accent-soft: #E3F0EA; --warn: #9A5B12;
+  --bg: #EEF2F6; --sheet: #FFFFFF; --ink: #0F1D2E; --muted: #5A6878; --line: #DCE3EA;
+  --band: #0F2238; --band-ink: #F2F6FA; --band-muted: #A9B8C8;
+  --accent: #0E7A57; --accent-soft: #E2F2EB; --gold: #C98A1B; --danger: #B4442C;
   --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
-  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
-  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --f-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0F1513; --surface: #17201D; --ink: #E7EEEB; --muted: #9AABA5;
-  --line: #2A3632; --accent: #5FC39E; --accent-soft: #1C2E27; --warn: #E2A35A; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #0F1513; --surface: #17201D; --ink: #E7EEEB; --muted: #9AABA5;
-  --line: #2A3632; --accent: #5FC39E; --accent-soft: #1C2E27; --warn: #E2A35A; color-scheme: dark }
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0A121C; --sheet: #111C29; --ink: #E8EEF4; --muted: #94A3B4; --line: #223244;
+  --band: #0C1826; --band-ink: #F2F6FA; --band-muted: #93A5B8;
+  --accent: #3FC795; --accent-soft: #14301F; --gold: #E5AE4A; --danger: #E57A60; color-scheme: dark } }
 
 * { box-sizing: border-box }
-body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); padding: 0 16px }
-.wrap { max-width: 860px; margin: 0 auto; padding-block: 48px 72px; display: grid; gap: 56px }
-h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 0 }
-h1 { font-size: clamp(2.1rem, 6vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em }
-h2 { font-size: 1.6rem; font-weight: 800 }
-h3 { font-size: 1.1rem; font-weight: 600 }
-p { margin: 0; max-width: 65ch }
-.eyebrow { font: 600 0.78rem/1 var(--f-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) }
-section { display: grid; gap: 20px }
-.lede { color: var(--muted); font-size: 1.12rem }
-header { display: grid; gap: 16px }
-.stat { display: flex; flex-wrap: wrap; gap: 12px 28px; padding-top: 8px }
-.stat div { display: grid }
-.stat b { font: 500 1.5rem var(--f-mono); color: var(--accent) }
-.stat span { color: var(--muted); font-size: 0.9rem }
+html { -webkit-text-size-adjust: 100% }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--f-body) }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.08; text-wrap: balance }
+p { margin: 0 }
+.gutter { padding-inline: 16px }
+.inner { max-width: 1080px; margin: 0 auto }
 
-/* timeline */
-.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 }
-.steps li { display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line) }
-.steps li:last-child { border-bottom: 1px solid var(--line) }
-.when { font: 500 0.9rem var(--f-mono); color: var(--accent); padding-top: 2px }
-.steps p { color: var(--muted) }
-.steps h3 { margin-bottom: 4px }
+/* masthead */
+.band { background: var(--band); color: var(--band-ink); padding-block: 40px 140px;
+  background-image: radial-gradient(1200px 400px at 85% -10%, rgba(63,199,149,.16), transparent 60%) }
+.brandrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 48px; font-size: .9rem; color: var(--band-muted) }
+.mark { display: flex; align-items: center; gap: 10px; font: 700 1rem var(--f-display); color: var(--band-ink) }
+.mark svg { width: 26px; height: 26px }
+.kicker { font: 600 .75rem/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: #3FC795 }
+.band h1 { font-size: clamp(2.2rem, 6.4vw, 4rem); font-weight: 800; letter-spacing: -.025em; max-width: 14ch; margin-top: 14px }
+.band .lede { color: var(--band-muted); font-size: 1.12rem; max-width: 52ch; margin-top: 18px }
 
-/* tabs + templates */
-.tabs { display: flex; flex-wrap: wrap; gap: 8px }
-.tabs button { font: 600 0.95rem var(--f-body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer }
-.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg) }
-.panel { display: grid; gap: 14px }
-.tpl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 10px; min-width: 0 }
-.tpl-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap }
-.tpl pre { margin: 0; white-space: pre-wrap; font: 1rem/1.55 var(--f-body); color: var(--ink) }
-.copy { font: 600 0.85rem var(--f-body); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer }
-.copy:hover { background: var(--accent-soft) }
-button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-.note { font-size: 0.92rem; color: var(--muted) }
+/* sheet */
+.sheet { background: var(--sheet); border-radius: 18px; margin-top: -100px; box-shadow: 0 30px 60px -30px rgba(15,29,46,.35), 0 0 0 1px var(--line);
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) }
+.inputs { padding: 32px; display: grid; gap: 22px; border-right: 1px solid var(--line); align-content: start }
+.inputs h2, .out h2 { font-size: .78rem; font-family: var(--f-body); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted) }
+.field { display: grid; gap: 8px }
+.field-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px }
+.field label { font-weight: 600; font-size: .95rem }
+.field .hint { font-size: .82rem; color: var(--muted) }
+.numbox { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); padding: 0 10px; width: 132px; flex: none }
+.numbox span { color: var(--muted); font: 500 .9rem var(--f-mono) }
+.numbox input { border: 0; background: transparent; color: var(--ink); font: 600 1rem var(--f-mono); width: 100%; padding: 8px 4px; text-align: right; font-variant-numeric: tabular-nums }
+.numbox input:focus { outline: none }
+.numbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft) }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--accent) var(--p, 50%), var(--line) var(--p, 50%)); cursor: pointer }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--sheet); border: 3px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,.2) }
+input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--sheet); border: 3px solid var(--accent) }
+input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 4px; gap: 4px }
+.seg button { font: 600 .92rem var(--f-body); border: 0; border-radius: 7px; padding: 9px; background: transparent; color: var(--muted); cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--sheet); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12) }
+.seg button:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
-/* objections */
-details { border-top: 1px solid var(--line); padding: 14px 0 }
-details:last-of-type { border-bottom: 1px solid var(--line) }
-summary { cursor: pointer; font: 600 1.05rem var(--f-display); list-style-position: outside }
-details p { margin-top: 10px; color: var(--muted) }
-details p q { color: var(--ink) }
+/* results */
+.out { padding: 32px; display: grid; gap: 22px; align-content: start }
+.hero-num { display: grid; gap: 4px }
+.hero-num .lbl { color: var(--muted); font-weight: 500 }
+.hero-num .val { font: 700 clamp(2.8rem, 7vw, 4.2rem)/1 var(--f-display); letter-spacing: -.03em; color: var(--accent); font-variant-numeric: tabular-nums }
+.hero-num .val small { font-size: .38em; color: var(--muted); font-weight: 500; letter-spacing: 0 }
+.verdict { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: var(--accent-soft); font-weight: 600; font-size: .95rem }
+.verdict .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex: none; margin-top: 6px }
+.verdict.warn { background: color-mix(in srgb, var(--gold) 14%, transparent) }
+.verdict.warn .dot { background: var(--gold) }
+.verdict.bad { background: color-mix(in srgb, var(--danger) 12%, transparent) }
+.verdict.bad .dot { background: var(--danger) }
+.rows { display: grid }
+.r { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line) }
+.r:last-child { border-bottom: 0 }
+.r span { color: var(--muted) }
+.r b { font: 600 1rem var(--f-mono); font-variant-numeric: tabular-nums; text-align: right }
+.r b em { font-style: normal; font-size: .75rem; color: var(--muted); margin-left: 6px }
+.chart { border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 6px }
+.chart-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: .85rem; color: var(--muted); margin-bottom: 6px }
+.chart-head b { color: var(--ink) }
+.chart svg { width: 100%; height: auto; display: block }
 
-/* calculator */
-.calc { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px }
-.fields { display: grid; gap: 14px; min-width: 0 }
-.fields label { display: grid; gap: 4px; font-weight: 600; font-size: 0.92rem }
-.fields input, .fields select { font: 500 1rem var(--f-mono); padding: 9px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100% }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
-.results { display: grid; gap: 0; align-content: start; min-width: 0 }
-.res { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line) }
-.res span { color: var(--muted) }
-.res b { font: 500 1.05rem var(--f-mono); font-variant-numeric: tabular-nums; text-align: right }
-.big { background: var(--accent-soft); border-radius: 8px; padding: 16px; margin-bottom: 8px; display: grid; gap: 2px }
-.big span { color: var(--muted); font-size: 0.9rem }
-.big b { font: 500 2rem var(--f-mono); color: var(--accent); font-variant-numeric: tabular-nums }
-.verdict { margin-top: 14px; font-weight: 600 }
-.verdict.warn { color: var(--warn) }
-footer { color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--line); padding-top: 20px }
-@media (max-width: 520px) { .steps li { grid-template-columns: 1fr; gap: 4px } }
+/* lead form */
+.cta { margin-top: 28px; background: var(--sheet); border-radius: 18px; box-shadow: 0 0 0 1px var(--line); padding: 32px;
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; align-items: start }
+.cta h2 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); font-weight: 800; letter-spacing: -.02em }
+.cta p { color: var(--muted); margin-top: 12px; max-width: 46ch }
+.ticks { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px }
+.ticks li { display: flex; gap: 10px; align-items: center; font-weight: 500 }
+.ticks li::before { content: ""; width: 18px; height: 18px; border-radius: 50%; flex: none;
+  background: var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%230E7A57' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat }
+form.lead { display: grid; gap: 14px }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px }
+.lead label { display: grid; gap: 6px; font-weight: 600; font-size: .9rem }
+.lead input[type=text], .lead input[type=email], .lead input[type=tel] { font: 500 1rem var(--f-body); padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100% }
+.lead input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft) }
+.consent { display: flex !important; grid-template-columns: none; gap: 10px; align-items: flex-start; font-weight: 400 !important; font-size: .82rem !important; color: var(--muted) }
+.consent input { margin-top: 3px; accent-color: var(--accent) }
+.btn { font: 700 1.05rem var(--f-display); padding: 15px 22px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; cursor: pointer; transition: transform .15s, filter .15s }
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px) }
+.btn:disabled { opacity: .6; cursor: wait }
+.form-msg { font-weight: 600; font-size: .95rem }
+.form-msg.err { color: var(--danger) }
+.done { display: grid; gap: 8px; padding: 22px; border-radius: 12px; background: var(--accent-soft) }
+.done h3 { font-size: 1.3rem }
+.hp { position: absolute; left: -9999px }
+
+footer { padding-block: 32px 48px; color: var(--muted); font-size: .8rem; display: grid; gap: 8px }
+footer p { max-width: 90ch }
+
+@media (max-width: 860px) {
+  .sheet, .cta { grid-template-columns: 1fr }
+  .inputs { border-right: 0; border-bottom: 1px solid var(--line) }
+}
+@media (max-width: 480px) {
+  .inputs, .out, .cta { padding: 22px 18px }
+  .pair, .f2 { grid-template-columns: 1fr }
+  .band { padding-block: 28px 120px }
+  .brandrow { margin-bottom: 32px }
+  .numbox { width: 120px }
+}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important } }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <section id="calculator">
-    <header><div class="eyebrow">Canada · Mortgage refinance</div>
-    <h1>Refinance Savings Calculator</h1>
-    <p class="lede">See what refinancing could save you each month, what it costs to break your current mortgage, and how long until it pays for itself. The numbers below are an example; enter your own.</p></header>
-    <div class="calc">
-      <form class="fields" id="calc-form">
-        <label for="bal">Mortgage balance ($)<input id="bal" type="number" inputmode="decimal" value="420000" min="0" step="1000"></label>
-        <div class="row2">
-          <label for="cur">Current rate (%)<input id="cur" type="number" inputmode="decimal" value="5.29" step="0.01"></label>
-          <label for="new">New rate (%)<input id="new" type="number" inputmode="decimal" value="4.19" step="0.01"></label>
-        </div>
-        <div class="row2">
-          <label for="amort">Years left (amortization)<input id="amort" type="number" inputmode="numeric" value="22" min="1" max="30"></label>
-          <label for="months">Months left in term<input id="months" type="number" inputmode="numeric" value="20" min="0" max="120"></label>
-        </div>
-        <label for="type">Current mortgage type
-          <select id="type"><option value="fixed">Fixed</option><option value="variable">Variable</option></select></label>
-        <label for="cmp" id="cmp-label">Lender's rate for remaining term (%), for the IRD estimate<input id="cmp" type="number" inputmode="decimal" value="4.49" step="0.01"></label>
-        <label for="fees">Legal and appraisal fees ($)<input id="fees" type="number" inputmode="decimal" value="1500" step="100"></label>
-      </form>
-      <div class="results" aria-live="polite">
-        <div class="big"><span>Monthly savings</span><b id="r-save">–</b></div>
-        <div class="res"><span>Current payment</span><b id="r-old">–</b></div>
-        <div class="res"><span>New payment</span><b id="r-new">–</b></div>
-        <div class="res"><span>Estimated penalty</span><b id="r-pen">–</b></div>
-        <div class="res"><span>Total cost to switch</span><b id="r-cost">–</b></div>
-        <div class="res"><span>Break-even</span><b id="r-be">–</b></div>
-        <div class="res"><span>Net savings over 5 years</span><b id="r-5y">–</b></div>
-        <p class="verdict" id="r-verdict"></p>
+<div class="band gutter">
+  <div class="inner">
+    <div class="brandrow">
+      <div class="mark" aria-hidden="false">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#3FC795"/><path d="M8 17l8-7 8 7M11 15v8h10v-8" fill="none" stroke="#0F2238" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        Refi Check
       </div>
+      <span>Built for Canadian homeowners</span>
     </div>
-    <p class="note">These are estimates only. Fixed-rate payments use Canadian semi-annual compounding. The penalty shown is the higher of 3 months' interest or a simple IRD estimate, and actual lender penalties vary. Always confirm the exact penalty with the current lender.</p>
-  </section>
-  <footer>Want exact numbers? A mortgage broker can confirm your penalty and today's rates at no cost.</footer>
+    <div class="kicker">Free mortgage calculator</div>
+    <h1>Is refinancing worth it for you?</h1>
+    <p class="lede">See your new monthly payment, what it costs to break your current mortgage, and how many months until refinancing pays for itself. It takes about 30 seconds.</p>
+  </div>
 </div>
 
-<script>
-// Calculator
-const $ = id => document.getElementById(id);
-const num = id => parseFloat($(id).value) || 0;
-const money = n => (n < 0 ? '−' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('en-CA');
+<main class="gutter">
+  <div class="inner">
+    <section class="sheet" aria-label="Calculator">
+      <div class="inputs">
+        <h2>Your mortgage</h2>
 
-function payment(principal, annualPct, years, fixed) {
-  const n = years * 12;
-  if (principal <= 0 || n <= 0) return 0;
-  const r = annualPct / 100;
-  // Canadian fixed: compounded semi-annually; variable: compounded monthly
-  const i = fixed ? Math.pow(1 + r / 2, 1 / 6) - 1 : r / 12;
-  if (i === 0) return principal / n;
-  return principal * i / (1 - Math.pow(1 + i, -n));
+        <div class="field">
+          <div class="field-top"><label for="bal">Balance owing</label>
+            <div class="numbox"><span>$</span><input id="bal" inputmode="numeric" value="450,000" aria-label="Balance owing in dollars"></div></div>
+          <input type="range" id="bal-r" min="50000" max="1500000" step="5000" value="450000" aria-label="Balance owing slider">
+        </div>
+
+        <div class="pair">
+          <div class="field">
+            <div class="field-top"><label for="cur">Current rate</label>
+              <div class="numbox"><input id="cur" inputmode="decimal" value="6.09" aria-label="Current rate percent"><span>%</span></div></div>
+            <input type="range" id="cur-r" min="1" max="10" step="0.01" value="6.09" aria-label="Current rate slider">
+          </div>
+          <div class="field">
+            <div class="field-top"><label for="new">New rate</label>
+              <div class="numbox"><input id="new" inputmode="decimal" value="4.29" aria-label="New rate percent"><span>%</span></div></div>
+            <input type="range" id="new-r" min="1" max="10" step="0.01" value="4.29" aria-label="New rate slider">
+          </div>
+        </div>
+
+        <div class="pair">
+          <div class="field">
+            <div class="field-top"><label for="amort">Years left to pay</label>
+              <div class="numbox"><input id="amort" inputmode="numeric" value="23" aria-label="Years left"><span>yrs</span></div></div>
+            <input type="range" id="amort-r" min="5" max="30" step="1" value="23" aria-label="Years left slider">
+          </div>
+          <div class="field">
+            <div class="field-top"><label for="months">Months left in term</label>
+              <div class="numbox"><input id="months" inputmode="numeric" value="30" aria-label="Months left in term"><span>mo</span></div></div>
+            <input type="range" id="months-r" min="0" max="60" step="1" value="30" aria-label="Months left slider">
+          </div>
+        </div>
+
+        <div class="field">
+          <label id="type-l">Current mortgage type</label>
+          <div class="seg" role="group" aria-labelledby="type-l">
+            <button type="button" id="t-var" aria-pressed="true">Variable</button>
+            <button type="button" id="t-fix" aria-pressed="false">Fixed</button>
+          </div>
+        </div>
+
+        <div class="field" id="cmp-field" hidden>
+          <div class="field-top"><div><label for="cmp">Lender's posted rate for your remaining term</label>
+            <p class="hint">Used to estimate the interest rate differential (IRD) penalty. Ask your lender, or leave as is.</p></div>
+            <div class="numbox"><input id="cmp" inputmode="decimal" value="5.49" aria-label="Comparison rate percent"><span>%</span></div></div>
+        </div>
+
+        <div class="field">
+          <div class="field-top"><div><label for="fees">Legal and appraisal fees</label><p class="hint">Often $1,000 to $2,000. Some lenders cover them.</p></div>
+            <div class="numbox"><span>$</span><input id="fees" inputmode="numeric" value="1,500" aria-label="Fees in dollars"></div></div>
+        </div>
+      </div>
+
+      <div class="out" aria-live="polite">
+        <h2>Your result</h2>
+        <div class="hero-num">
+          <span class="lbl">You could save</span>
+          <span class="val" id="o-save">$0<small> /month</small></span>
+        </div>
+        <div class="verdict" id="o-verdict"><span class="dot"></span><span id="o-verdict-t"></span></div>
+        <div class="rows">
+          <div class="r"><span>Current payment</span><b id="o-old">–</b></div>
+          <div class="r"><span>New payment</span><b id="o-new">–</b></div>
+          <div class="r"><span>Penalty to break (estimate)</span><b id="o-pen">–</b></div>
+          <div class="r"><span>Total cost to switch</span><b id="o-cost">–</b></div>
+          <div class="r"><span>Net savings over 5 years</span><b id="o-5y">–</b></div>
+        </div>
+        <div class="chart">
+          <div class="chart-head"><span>Savings minus switching cost, over 5 years</span><span>Break-even: <b id="o-be">–</b></span></div>
+          <svg id="chart" viewBox="0 0 400 170" role="img" aria-label="Chart of cumulative net savings over 60 months"></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="get-numbers">
+      <div>
+        <h2>Get your exact numbers</h2>
+        <p>This calculator gives an estimate. A licensed mortgage broker can confirm your real penalty, compare rates from dozens of lenders, and tell you if refinancing makes sense. There's no cost and no obligation.</p>
+        <ul class="ticks">
+          <li>Your exact penalty from your lender</li>
+          <li>Rates from banks, credit unions and other lenders</li>
+          <li>A straight answer, even if it's "wait"</li>
+        </ul>
+      </div>
+      <div id="form-wrap">
+        <form class="lead" name="refi-lead" method="POST" data-netlify="true" netlify-honeypot="company" id="lead-form">
+          <input type="hidden" name="form-name" value="refi-lead">
+          <input type="hidden" name="calculator-summary" id="f-summary">
+          <p class="hp"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off"></label></p>
+          <div class="f2">
+            <label for="f-name">Full name<input type="text" id="f-name" name="name" autocomplete="name" required></label>
+            <label for="f-phone">Phone<input type="tel" id="f-phone" name="phone" autocomplete="tel" required></label>
+          </div>
+          <label for="f-email">Email<input type="email" id="f-email" name="email" autocomplete="email" required></label>
+          <label class="consent" for="f-consent"><input type="checkbox" id="f-consent" name="consent" value="yes" required>
+            <span>I agree to be contacted by phone, text or email about my mortgage. I can unsubscribe at any time.</span></label>
+          <button class="btn" type="submit" id="f-btn">Get my exact numbers</button>
+          <p class="form-msg" id="f-msg" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>These figures are estimates only and are not a mortgage offer. Fixed-rate payments use Canadian semi-annual compounding. Variable-rate payments use monthly compounding. The penalty for a fixed mortgage is shown as the higher of 3 months' interest or a simplified IRD estimate. Lenders calculate penalties differently, so always confirm yours with your current lender.</p>
+    </footer>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const parse = v => parseFloat(String(v).replace(/[^0-9.]/g, '')) || 0;
+const money = n => (n < 0 ? '−$' : '$') + Math.abs(Math.round(n)).toLocaleString('en-CA');
+let fixed = false;
+
+// keep slider and number box in sync
+const links = [['bal', true], ['cur'], ['new'], ['amort'], ['months']];
+function paint(r) { const p = (r.value - r.min) / (r.max - r.min) * 100; r.style.setProperty('--p', p + '%'); }
+links.forEach(([id, comma]) => {
+  const box = $(id), r = $(id + '-r');
+  r.addEventListener('input', () => { box.value = comma ? (+r.value).toLocaleString('en-CA') : r.value; paint(r); calc(); });
+  box.addEventListener('input', () => { r.value = parse(box.value); paint(r); calc(); });
+  box.addEventListener('blur', () => { if (comma) box.value = parse(box.value).toLocaleString('en-CA'); });
+  paint(r);
+});
+['cmp', 'fees'].forEach(id => {
+  $(id).addEventListener('input', calc);
+  $(id).addEventListener('blur', () => { if (id === 'fees') $(id).value = parse($(id).value).toLocaleString('en-CA'); });
+});
+function setType(isFixed) {
+  fixed = isFixed;
+  $('t-fix').setAttribute('aria-pressed', isFixed); $('t-var').setAttribute('aria-pressed', !isFixed);
+  $('cmp-field').hidden = !isFixed; calc();
+}
+$('t-fix').onclick = () => setType(true);
+$('t-var').onclick = () => setType(false);
+
+function payment(P, pct, years, isFixed) {
+  const n = years * 12; if (P <= 0 || n <= 0) return 0;
+  const r = pct / 100;
+  const i = isFixed ? Math.pow(1 + r / 2, 1 / 6) - 1 : r / 12; // Canadian fixed: semi-annual compounding
+  return i === 0 ? P / n : P * i / (1 - Math.pow(1 + i, -n));
 }
 
+let last = {};
 function calc() {
-  const bal = num('bal'), cur = num('cur'), nw = num('new'), yrs = num('amort');
-  const months = num('months'), fees = num('fees'), cmp = num('cmp');
-  const fixed = $('type').value === 'fixed';
-  $('cmp-label').hidden = !fixed;
+  const bal = parse($('bal').value), cur = parse($('cur').value), nw = parse($('new').value);
+  const yrs = parse($('amort').value), months = parse($('months').value);
+  const cmp = parse($('cmp').value), fees = parse($('fees').value);
 
-  const oldPmt = payment(bal, cur, yrs, fixed);
-  const newPmt = payment(bal, nw, yrs, true);
-  const save = oldPmt - newPmt;
-  const threeMonths = bal * (cur / 100) * 3 / 12;
-  const ird = Math.max(0, bal * ((cur - cmp) / 100) * months / 12);
-  const pen = months <= 0 ? 0 : (fixed ? Math.max(threeMonths, ird) : threeMonths);
+  const oldP = payment(bal, cur, yrs, fixed), newP = payment(bal, nw, yrs, true);
+  const save = oldP - newP;
+  const three = bal * cur / 100 / 4;
+  const ird = Math.max(0, bal * (cur - cmp) / 100 * months / 12);
+  const pen = months <= 0 ? 0 : fixed ? Math.max(three, ird) : three;
+  const penType = months <= 0 ? '' : fixed && ird > three ? 'IRD' : '3 mo. interest';
   const cost = pen + fees;
   const be = save > 0 ? Math.ceil(cost / save) : Infinity;
+  const net5 = save * 60 - cost;
 
-  $('r-save').textContent = money(save);
-  $('r-old').textContent = money(oldPmt);
-  $('r-new').textContent = money(newPmt);
-  $('r-pen').textContent = money(pen) + (fixed && months > 0 ? (ird > threeMonths ? ' (IRD)' : ' (3 mo.)') : '');
-  $('r-cost').textContent = money(cost);
-  $('r-be').textContent = isFinite(be) ? be + ' months' : 'Never';
-  $('r-5y').textContent = money(save * 60 - cost);
+  $('o-save').innerHTML = money(Math.max(0, save)) + '<small> /month</small>';
+  $('o-old').textContent = money(oldP);
+  $('o-new').textContent = money(newP);
+  $('o-pen').innerHTML = money(pen) + (penType ? '<em>' + penType + '</em>' : '');
+  $('o-cost').textContent = money(cost);
+  $('o-5y').textContent = money(net5);
+  $('o-be').textContent = isFinite(be) ? (be <= 60 ? be + ' months' : 'over 5 years') : 'never';
 
-  const v = $('r-verdict');
-  if (!isFinite(be)) { v.textContent = 'At these rates the new payment is not lower. Look at debt consolidation or wait for renewal.'; v.className = 'verdict warn'; }
-  else if (be <= 24) { v.textContent = 'The savings cover the cost in ' + be + ' months. This one is worth a conversation.'; v.className = 'verdict'; }
-  else { v.textContent = 'Break-even takes over 2 years. Consider waiting until closer to renewal.'; v.className = 'verdict warn'; }
+  const v = $('o-verdict'), t = $('o-verdict-t');
+  if (!isFinite(be)) { v.className = 'verdict bad'; t.textContent = "At these rates your payment wouldn't go down. A broker can check whether other options, like consolidating debt, make sense."; }
+  else if (be <= 24) { v.className = 'verdict'; t.textContent = 'Refinancing pays for itself in ' + be + ' months. This looks worth exploring.'; }
+  else if (be <= 60) { v.className = 'verdict warn'; t.textContent = 'It takes ' + be + ' months to break even. It could still make sense, especially if you plan to stay put.'; }
+  else { v.className = 'verdict warn'; t.textContent = 'Break-even is more than 5 years away. Waiting until renewal may be better.'; }
+
+  last = { bal, cur, nw, yrs, months, fixed, save, pen, cost, be, net5 };
+  $('f-summary').value = `Balance ${money(bal)} | ${fixed ? 'Fixed' : 'Variable'} ${cur}% -> ${nw}% | ${yrs} yrs amort, ${months} mo left in term | Saves ${money(save)}/mo | Penalty est. ${money(pen)} | Break-even ${isFinite(be) ? be + ' mo' : 'never'}`;
+  drawChart(save, cost, be);
 }
-$('calc-form').addEventListener('input', calc);
-$('calc-form').addEventListener('submit', e => e.preventDefault());
+
+function drawChart(save, cost, be) {
+  const W = 400, H = 170, L = 52, R = 10, T = 12, B = 26;
+  const vals = Array.from({ length: 61 }, (_, m) => save * m - cost);
+  let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+  if (hi - lo < 1) hi = lo + 1;
+  const pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+  const x = m => L + m / 60 * (W - L - R);
+  const y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const step = niceStep((hi - lo) / 4);
+  let g = '';
+  for (let t = Math.ceil(lo / step) * step; t <= hi; t += step) {
+    g += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1"/>`;
+    g += `<text x="${L - 8}" y="${y(t) + 4}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${short(t)}</text>`;
+  }
+  [0, 12, 24, 36, 48, 60].forEach(m => g += `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${m === 0 ? 'Now' : 'Yr ' + m / 12}</text>`);
+  const pts = vals.map((v, m) => `${x(m).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area = `${x(0)},${y(0)} ${pts} ${x(60)},${y(0)}`;
+  g += `<defs><clipPath id="above"><rect x="0" y="0" width="${W}" height="${y(0)}"/></clipPath><clipPath id="below"><rect x="0" y="${y(0)}" width="${W}" height="${H}"/></clipPath></defs>`;
+  g += `<polygon points="${area}" fill="var(--accent)" opacity=".16" clip-path="url(#above)"/>`;
+  g += `<polygon points="${area}" fill="var(--danger)" opacity=".12" clip-path="url(#below)"/>`;
+  g += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  g += `<polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  if (isFinite(be) && be <= 60) {
+    g += `<line x1="${x(be)}" x2="${x(be)}" y1="${T}" y2="${H - B}" stroke="var(--gold)" stroke-width="1.5"/>`;
+    g += `<circle cx="${x(be)}" cy="${y(0)}" r="5" fill="var(--gold)" stroke="var(--sheet)" stroke-width="2"/>`;
+  }
+  g += `<circle cx="${x(60)}" cy="${y(vals[60])}" r="4.5" fill="var(--accent)" stroke="var(--sheet)" stroke-width="2"/>`;
+  $('chart').innerHTML = g;
+}
+function niceStep(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * p; }
+function short(v) { const a = Math.abs(v); const s = a >= 1000 ? '$' + Math.round(a / 1000) + 'k' : '$' + Math.round(a); return v < 0 ? '−' + s : s; }
+
+// lead form → Netlify Forms
+$('lead-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('f-btn'), msg = $('f-msg');
+  btn.disabled = true; msg.className = 'form-msg'; msg.textContent = 'Sending…';
+  try {
+    const body = new URLSearchParams(new FormData(e.target)).toString();
+    const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    if (!res.ok) throw new Error(res.status);
+    $('form-wrap').innerHTML = '<div class="done"><h3>Thanks, you\'re all set.</h3><p>A mortgage broker will contact you within one business day with your exact numbers.</p></div>';
+  } catch (err) {
+    btn.disabled = false; msg.className = 'form-msg err';
+    msg.textContent = "That didn't go through. Check your connection and try again.";
+  }
+});
+
 calc();
 </script>
 </body>

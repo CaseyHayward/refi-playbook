@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Broker Lead ROI</title>
+<meta name="description" content="See what your refinance leads are really worth: cost per funded deal, commission earned and return on spend.">
+<meta property="og:title" content="Broker Lead ROI Calculator">
+<meta property="og:description" content="See what your refinance leads are really worth.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: navy masthead; inputs sheet beside a funnel that narrows stage by stage; money summary; levers table */
+:root {
+  --bg: #EEF2F6; --sheet: #FFFFFF; --ink: #0F1D2E; --muted: #5A6878; --line: #DCE3EA;
+  --band: #0F2238; --band-ink: #F2F6FA; --band-muted: #A9B8C8;
+  --accent: #0E7A57; --accent-soft: #E2F2EB; --gold: #C98A1B;
+  --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0A121C; --sheet: #111C29; --ink: #E8EEF4; --muted: #94A3B4; --line: #223244;
+  --band: #0C1826; --band-ink: #F2F6FA; --band-muted: #93A5B8;
+  --accent: #3FC795; --accent-soft: #14301F; --gold: #E5AE4A; color-scheme: dark } }
+
+* { box-sizing: border-box }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--f-body) }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.08; text-wrap: balance }
+p { margin: 0 }
+.gutter { padding-inline: 16px }
+.inner { max-width: 1080px; margin: 0 auto }
+
+.band { background: var(--band); color: var(--band-ink); padding-block: 40px 140px;
+  background-image: radial-gradient(1200px 400px at 85% -10%, rgba(229,174,74,.14), transparent 60%) }
+.brandrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 48px; font-size: .9rem; color: var(--band-muted) }
+.mark { display: flex; align-items: center; gap: 10px; font: 700 1rem var(--f-display); color: var(--band-ink) }
+.mark svg { width: 26px; height: 26px }
+.kicker { font: 600 .75rem/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: #E5AE4A }
+.band h1 { font-size: clamp(2.2rem, 6.4vw, 4rem); font-weight: 800; letter-spacing: -.025em; max-width: 16ch; margin-top: 14px }
+.band .lede { color: var(--band-muted); font-size: 1.12rem; max-width: 56ch; margin-top: 18px }
+
+.sheet { background: var(--sheet); border-radius: 18px; margin-top: -100px; box-shadow: 0 30px 60px -30px rgba(15,29,46,.35), 0 0 0 1px var(--line);
+  display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr) }
+.inputs { padding: 32px; display: grid; gap: 20px; border-right: 1px solid var(--line); align-content: start }
+.label-caps { font: 600 .78rem var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted) }
+.field { display: grid; gap: 8px }
+.field-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px }
+.field label { font-weight: 600; font-size: .95rem }
+.hint { font-size: .82rem; color: var(--muted) }
+.numbox { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); padding: 0 10px; width: 120px; flex: none }
+.numbox span { color: var(--muted); font: 500 .9rem var(--f-mono) }
+.numbox input { border: 0; background: transparent; color: var(--ink); font: 600 1rem var(--f-mono); width: 100%; padding: 8px 4px; text-align: right; font-variant-numeric: tabular-nums }
+.numbox input:focus { outline: none }
+.numbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft) }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--accent) var(--p, 50%), var(--line) var(--p, 50%)); cursor: pointer }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--sheet); border: 3px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,.2) }
+input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--sheet); border: 3px solid var(--accent) }
+input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px }
+.sep { border-top: 1px solid var(--line); padding-top: 18px }
+
+.out { padding: 32px; display: grid; gap: 24px; align-content: start }
+.money { display: grid; grid-template-columns: 1fr 1fr; gap: 18px }
+.money div { display: grid; gap: 2px }
+.money span { color: var(--muted); font-size: .9rem }
+.money b { font: 700 clamp(1.6rem, 4vw, 2.2rem)/1.1 var(--f-display); font-variant-numeric: tabular-nums; letter-spacing: -.02em }
+.money .roi b { color: var(--accent); font-size: clamp(2.6rem, 7vw, 3.8rem) }
+.money .roi { grid-column: 1 / -1 }
+
+.funnel { display: grid; gap: 6px }
+.stage { display: grid; grid-template-columns: 116px minmax(0, 1fr) 64px; gap: 12px; align-items: center }
+.stage .nm { font-size: .88rem; color: var(--muted) }
+.stage .bar { height: 30px; border-radius: 6px; background: var(--accent); opacity: var(--o, 1); width: var(--w, 100%); min-width: 4px; transition: width .25s ease }
+.stage .n { font: 600 .95rem var(--f-mono); text-align: right; font-variant-numeric: tabular-nums }
+.stage .drop { grid-column: 2 / 4; font-size: .78rem; color: var(--muted); margin-top: -2px }
+
+.levers { margin-top: 28px; background: var(--sheet); border-radius: 18px; box-shadow: 0 0 0 1px var(--line); padding: 32px; display: grid; gap: 20px }
+.levers h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); font-weight: 800; letter-spacing: -.02em }
+.levers > p { color: var(--muted); max-width: 62ch }
+.tbl { overflow-x: auto }
+table { width: 100%; border-collapse: collapse; min-width: 520px }
+th, td { text-align: left; padding: 14px 12px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font: 600 .75rem var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+td.num { font: 600 1rem var(--f-mono); color: var(--accent); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums }
+th.num { text-align: right }
+td b { display: block; font-family: var(--f-display); font-size: 1.05rem; margin-bottom: 2px }
+td span { color: var(--muted); font-size: .92rem }
+
+footer { padding-block: 32px 48px; color: var(--muted); font-size: .8rem }
+footer p { max-width: 90ch }
+
+@media (max-width: 860px) { .sheet { grid-template-columns: 1fr } .inputs { border-right: 0; border-bottom: 1px solid var(--line) } }
+@media (max-width: 480px) {
+  .inputs, .out, .levers { padding: 22px 18px }
+  .band { padding-block: 28px 120px } .brandrow { margin-bottom: 32px }
+  .stage { grid-template-columns: 92px minmax(0, 1fr) 52px; gap: 8px }
+  .numbox { width: 110px }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+</head>
+<body>
+
+<div class="band gutter">
+  <div class="inner">
+    <div class="brandrow">
+      <div class="mark">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#E5AE4A"/><path d="M8 22l6-6 4 4 7-8M19 12h6v6" fill="none" stroke="#0F2238" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        Lead ROI
+      </div>
+      <span>For mortgage brokers</span>
+    </div>
+    <div class="kicker">Free broker tool</div>
+    <h1>What are your refi leads really worth?</h1>
+    <p class="lede">Enter your lead volume, cost and close rates. You'll see your cost per funded deal, commission earned and return on every dollar spent, plus which change would add the most money.</p>
+  </div>
+</div>
+
+<main class="gutter">
+  <div class="inner">
+    <section class="sheet" aria-label="ROI calculator">
+      <div class="inputs" id="inputs">
+        <div class="label-caps">Your numbers</div>
+      </div>
+      <div class="out" aria-live="polite">
+        <div class="label-caps">Every month</div>
+        <div class="money">
+          <div class="roi"><span>Return on lead spend</span><b id="o-roi">–</b></div>
+          <div><span>Commission earned</span><b id="o-rev">–</b></div>
+          <div><span>Spent on leads</span><b id="o-spend">–</b></div>
+          <div><span>Cost per funded deal</span><b id="o-cpd">–</b></div>
+          <div><span>Profit per year</span><b id="o-year">–</b></div>
+        </div>
+        <div class="funnel" id="funnel"></div>
+      </div>
+    </section>
+
+    <section class="levers">
+      <h2>Your biggest money levers</h2>
+      <p>Each row shows the extra commission per year if you improve one step by a realistic amount, with everything else unchanged. The one at the top is where to focus first.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Change</th><th class="num">Extra per year</th></tr></thead>
+        <tbody id="levers"></tbody>
+      </table></div>
+    </section>
+
+    <footer><p>Estimates only. Commission depends on lender, product and deal size, and is shown here as basis points (bps) of the mortgage amount. One basis point is 0.01%, so 85 bps on $450,000 is $3,825. Volume bonuses and trailers are not included.</p></footer>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const parse = v => parseFloat(String(v).replace(/[^0-9.]/g, '')) || 0;
+const money = n => (n < 0 ? '−$' : '$') + Math.abs(Math.round(n)).toLocaleString('en-CA');
+
+const F = [
+  { id: 'leads', label: 'Leads per month', min: 5, max: 300, step: 5, val: 50, suf: '' },
+  { id: 'cpl', label: 'Cost per lead', min: 5, max: 200, step: 1, val: 40, pre: '$' },
+  { id: 'contact', label: 'Contact rate', hint: 'Leads you actually speak with', min: 10, max: 100, step: 1, val: 55, suf: '%', sep: true },
+  { id: 'app', label: 'Application rate', hint: 'Of the leads you speak with', min: 5, max: 80, step: 1, val: 30, suf: '%' },
+  { id: 'fund', label: 'Funding rate', hint: 'Of applications that close', min: 10, max: 100, step: 1, val: 60, suf: '%' },
+  { id: 'size', label: 'Average mortgage', min: 100000, max: 1500000, step: 10000, val: 450000, pre: '$', comma: true, sep: true },
+  { id: 'bps', label: 'Your commission', hint: 'Basis points of the mortgage', min: 30, max: 150, step: 5, val: 85, suf: 'bps' },
+];
+
+const wrap = $('inputs');
+F.forEach(f => {
+  const d = document.createElement('div');
+  d.className = 'field' + (f.sep ? ' sep' : '');
+  const shown = f.comma ? f.val.toLocaleString('en-CA') : f.val;
+  d.innerHTML = `<div class="field-top"><div><label for="${f.id}">${f.label}</label>${f.hint ? `<p class="hint">${f.hint}</p>` : ''}</div>
+    <div class="numbox">${f.pre ? `<span>${f.pre}</span>` : ''}<input id="${f.id}" inputmode="numeric" value="${shown}">${f.suf ? `<span>${f.suf}</span>` : ''}</div></div>
+    <input type="range" id="${f.id}-r" min="${f.min}" max="${f.max}" step="${f.step}" value="${f.val}" aria-label="${f.label} slider">`;
+  wrap.appendChild(d);
+  const box = d.querySelector('#' + f.id), r = d.querySelector('#' + f.id + '-r');
+  const paint = () => r.style.setProperty('--p', (r.value - r.min) / (r.max - r.min) * 100 + '%');
+  r.addEventListener('input', () => { box.value = f.comma ? (+r.value).toLocaleString('en-CA') : r.value; paint(); calc(); });
+  box.addEventListener('input', () => { r.value = parse(box.value); paint(); calc(); });
+  box.addEventListener('blur', () => { if (f.comma) box.value = parse(box.value).toLocaleString('en-CA'); });
+  paint();
+});
+
+const get = () => Object.fromEntries(F.map(f => [f.id, parse($(f.id).value)]));
+function model(v) {
+  const contacted = v.leads * v.contact / 100, apps = contacted * v.app / 100, deals = apps * v.fund / 100;
+  const perDeal = v.size * v.bps / 10000, rev = deals * perDeal, spend = v.leads * v.cpl;
+  return { contacted, apps, deals, perDeal, rev, spend, profit: rev - spend };
+}
+
+function calc() {
+  const v = get(), m = model(v);
+  $('o-roi').textContent = m.spend > 0 ? (m.rev / m.spend).toFixed(1) + '×' : '–';
+  $('o-rev').textContent = money(m.rev);
+  $('o-spend').textContent = money(m.spend);
+  $('o-cpd').textContent = m.deals > 0 ? money(m.spend / m.deals) : '–';
+  $('o-year').textContent = money(m.profit * 12);
+
+  const st = [['Leads', v.leads], ['Spoke with', m.contacted], ['Applied', m.apps], ['Funded', m.deals]];
+  $('funnel').innerHTML = '<div class="label-caps" style="margin-bottom:6px">Your funnel</div>' + st.map(([n, c], i) => {
+    const w = v.leads ? Math.max(1.5, c / v.leads * 100) : 0;
+    return `<div class="stage"><span class="nm">${n}</span><span class="bar" style="--w:${w}%;--o:${1 - i * 0.18}"></span><span class="n">${c < 10 && c % 1 ? c.toFixed(1) : Math.round(c)}</span></div>`;
+  }).join('') + `<p class="hint" style="margin-top:6px">${m.deals.toFixed(1)} funded deals a month at about ${money(m.perDeal)} each.</p>`;
+
+  const L = [
+    ['Call every lead within 5 minutes', 'Fast first calls typically lift contact rate. Modelled as +15 points.', { contact: Math.min(100, v.contact + 15) }],
+    ['Follow up 6–8 times over 14 days', 'Most brokers stop after 2 attempts. Modelled as +10 points contact rate.', { contact: Math.min(100, v.contact + 10) }],
+    ['Use a tighter first-call script', 'Qualify the goal, rate and renewal date on the first call. Modelled as +5 points application rate.', { app: Math.min(100, v.app + 5) }],
+    ['Collect documents up front', 'Send a checklist the day they apply. Modelled as +10 points funding rate.', { fund: Math.min(100, v.fund + 10) }],
+    ['Buy 20 more leads a month', 'Same conversion rates, more volume.', { leads: v.leads + 20 }],
+  ].map(([t, d, ch]) => [t, d, (model({ ...v, ...ch }).profit - m.profit) * 12]).sort((a, b) => b[2] - a[2]);
+  $('levers').innerHTML = L.map(([t, d, x]) => `<tr><td><b>${t}</b><span>${d}</span></td><td class="num">${x >= 0 ? '+' : ''}${money(x)}</td></tr>`).join('');
+}
+calc();
+</script>
+</body>
+</html>
