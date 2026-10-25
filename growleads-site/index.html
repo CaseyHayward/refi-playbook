@@ -165,6 +165,19 @@ footer a { color: var(--muted); }
   .top .btn-sm { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+.next-wrap { display: grid; gap: 12px; justify-items: center; margin-top: 14px; width: 100%; }
+.btn-next { padding: 16px 30px; font-size: 1.05rem; border-radius: 12px; }
+.btn-next svg { transition: transform .2s; }
+.btn-next:hover svg { transform: translateX(3px); }
+.next-hint { font-size: 0.95rem; color: var(--body); font-weight: 500; }
+.btn-next { min-width: 200px; }
+.alt-links { font-size: 0.9rem; color: var(--muted); }
+.alt-links a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+.alt-links a:hover { border-color: var(--ink); }
+.back { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-size: 0.9rem; font-weight: 600; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--ink); }
+.results-page section.block:first-of-type { padding-top: 28px; }
+@media (max-width: 600px) { .next-wrap .btn-next { width: 100%; } }
 </style>
 </head>
 <body>
@@ -172,7 +185,7 @@ footer a { color: var(--muted); }
 
   <header class="top">
     <a class="brand" href="https://growleads.ca/"><img src="logo.png" alt="">GrowLeads</a>
-    <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
+    <a class="btn btn-primary btn-sm" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">Book a call</a>
   </header>
 
   <section class="hero">
@@ -184,102 +197,13 @@ footer a { color: var(--muted); }
         <source src="owen-video.mp4" type="video/mp4">
       </video>
     </div>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">
-        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        Book a meeting
+    <div class="next-wrap">
+      <p class="next-hint">Watched it? Hit next to see live campaign results and client results.</p>
+      <a class="btn btn-primary btn-next" href="/results">Next
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a class="btn btn-light js-audit" href="mailto:Caseyhayward@growleads.ca?subject=Free%20TAM%20audit%20%2B%2090-day%20plan&body=Hey%20Casey%2C%0A%0AI%27d%20like%20my%20free%20TAM%20audit%20and%2090-day%20plan.%20Please%20send%20it%20to%20this%20email.%0A%0AThanks!">
-        <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        Get a free TAM audit
-      </a>
+      <p class="alt-links">Ready now? <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">Book a meeting</a> · <a class="js-audit" href="mailto:Caseyhayward@growleads.ca?subject=Free%20TAM%20audit%20%2B%2090-day%20plan&body=Hey%20Casey%2C%0A%0AI%27d%20like%20my%20free%20TAM%20audit%20and%2090-day%20plan.%20Please%20send%20it%20to%20this%20email.%0A%0AThanks!">Get a free TAM audit</a></p>
     </div>
-  </section>
-
-  <section class="block">
-    <div class="block-head">
-      <span class="label">Results</span>
-      <h2>Campaign results in the last few weeks</h2>
-    </div>
-    <div class="results">
-      <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">last week</span></span><span class="what">Closed deals</span></div>
-      <div class="result"><span class="who">Campus Crew</span><span class="big"><span class="num">26</span><span class="time">in 20 days</span></span><span class="what">Meetings booked</span></div>
-      <div class="result hot"><span class="who">RGR Marketing</span><span class="big"><span class="num">3</span><span class="time">in 3 days</span></span><span class="what">Meetings booked</span></div>
-    </div>
-    <div class="expect">
-      <div><span>First month</span><strong>5–15</strong><small>qualified meetings</small></div>
-      <div><span>Following months</span><strong>20–40</strong><small>meetings on average</small></div>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="block-head">
-      <span class="label">Live campaigns</span>
-      <h2>Interested replies from live campaigns</h2>
-      <p class="lede">Real replies from prospects, sent straight to our clients' Slack.</p>
-    </div>
-    <div class="feed-wrap">
-      <div class="feed-top"><span class="live"><i></i>Live</span><span># positive-replies-rgr-marketing</span></div>
-      <div class="feed" aria-label="Interested replies">
-        <div class="feed-track" id="feed-track">
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Larry M. (Independence Home Loans)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, sounds good. Yes, send any leads my way.”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Ivan G. (HG Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Good to hear from you. Please send over the calculator and I&#x27;ll take a look at it.”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Kristen C. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure! Thank you!”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 16</span></div><p class="alert">🔥 <strong>Positive reply – Lisa G. (Ethos Lending)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure, let&#x27;s see it. :)”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 13</span></div><p class="alert">🔥 <strong>Positive reply – David O. (ProLending Home Finance)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks and have a great day!”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Paul A. (NEW Cornerstone Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure send it for me to look at”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Jill S. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, thanks, Casey! 🌟”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Mike S. (Coastline Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Max U. (Stellar Mortgage Corp)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure”</p></div></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="block-head">
-      <span class="label">Our process</span>
-      <h2>Our qualification system</h2>
-      <p class="lede">Every prospect is vetted before they reach your calendar.</p>
-    </div>
-    <ol class="qual">
-      <li><span class="n">1</span><div><h3>Interested prospects apply</h3><p>Only people who raise their hand and apply move forward.</p></div></li>
-      <li><span class="n">2</span><div><h3>We triage every lead</h3><p>Each one is screened by phone to confirm fit before anything is booked.</p></div></li>
-      <li><span class="n">3</span><div><h3>A personalized video, made for you</h3><p>Before the meeting, each prospect gets a custom video explaining your offer, the purpose of the call, and whether they're the right fit.</p></div></li>
-    </ol>
-    <div class="qual-out">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#1764f0"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      You only speak with prospects who are interested, informed and qualified.
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="block-head">
-      <span class="label">What you get</span>
-      <h2>Built around your close rate</h2>
-    </div>
-    <div class="gets">
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15M13.5 5.5H8.25a2.25 2.25 0 0 0 0 4.5h3.5a2.25 2.25 0 0 1 0 4.5H6" stroke="#1764f0" stroke-width="1.8" stroke-linecap="round"/></svg></span><strong>Pay per meeting, no retainer</strong></div>
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4.5 3h3l1.5 4-2 1.25a9 9 0 0 0 4.75 4.75L13 11l4 1.5v3A1.5 1.5 0 0 1 15.5 17 12.5 12.5 0 0 1 3 4.5 1.5 1.5 0 0 1 4.5 3Z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every reply called within 1–3 minutes</strong></div>
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3.5 4.5h13v9h-7l-4 3v-3h-2z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every positive reply in your own Slack channel</strong></div>
-    </div>
-  </section>
-
-  <section class="cta" id="contact">
-    <span class="cta-badge">Free</span>
-    <h2>Get a free TAM audit and 90-day plan</h2>
-    <p>Made for you and sent straight to your inbox, so we can tell you exactly how many qualified meetings we can get you.</p>
-    <div class="cta-actions">
-      <a class="btn btn-primary js-audit" href="mailto:Caseyhayward@growleads.ca?subject=Free%20TAM%20audit%20%2B%2090-day%20plan&body=Hey%20Casey%2C%0A%0AI%27d%20like%20my%20free%20TAM%20audit%20and%2090-day%20plan.%20Please%20send%20it%20to%20this%20email.%0A%0AThanks!">
-        <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        Send me my free audit
-      </a>
-      <a class="btn btn-dark-ghost" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">
-        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        Book a meeting
-      </a>
-    </div>
-    <p class="email-line">Opens your email with the message already written. Just hit send.</p>
   </section>
 
   <footer>
