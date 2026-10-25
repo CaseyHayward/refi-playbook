@@ -181,88 +181,137 @@ footer a { color: var(--muted); }
 .page-intro p { color: var(--body); font-size: 1.05rem; }
 .results-page section.block:first-of-type { padding-top: 40px; }
 @media (max-width: 600px) { .next-wrap .btn-next { width: 100%; } }
+.wide { max-width: 1040px; }
+.page-intro { padding: 12px 0 40px; display: grid; gap: 12px; }
+.page-intro .back { margin: 0 0 4px; }
+.page-intro h1 { font-size: clamp(2rem, 5.6vw, 2.8rem); }
+.page-intro p { color: var(--body); font-size: 1.08rem; max-width: 36em; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.jump a { padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--body); font-size: 0.86rem; font-weight: 600; text-decoration: none; }
+.jump a:hover { border-color: #c9d3e1; color: var(--ink); }
+.row { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 48px; padding: 52px 0; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.row-head { align-self: start; position: sticky; top: 24px; display: grid; gap: 6px; }
+.row-head .idx { font-size: 0.8rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.row-head .label { margin: 0; }
+.row-head h2 { font-size: 1.5rem; }
+.row-head .lede { margin-top: 4px; color: var(--muted); font-size: 0.95rem; }
+.row-body { min-width: 0; display: grid; gap: 14px; }
+.avg { display: grid; gap: 10px; margin-top: 6px; }
+.avg-h { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.row-body .qual-out { margin-top: -4px; }
+.results-page .cta { margin-top: 24px; }
+.results-page .cta-actions { max-width: 520px; }
+.cta .btn { white-space: nowrap; }
+@media (max-width: 860px) {
+  .row { grid-template-columns: 1fr; gap: 22px; padding: 40px 0; }
+  .row-head { position: static; }
+}
+@media (max-width: 600px) { .row-body .gets { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<div class="wrap results-page">
+<div class="wrap results-page wide">
 
   <header class="top">
     <a class="brand" href="https://growleads.ca/"><img src="logo.png" alt="">GrowLeads</a>
     <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
   </header>
-  <a class="back" href="/">← Back to the video</a>
+
   <div class="page-intro">
+    <a class="back" href="/">← Back to the video</a>
     <h1>Live campaign and client results</h1>
     <p>What our campaigns are producing right now, and what that means for your calendar.</p>
+    <nav class="jump" aria-label="On this page">
+      <a href="#client-results">Client results</a>
+      <a href="#live-replies">Live replies</a>
+      <a href="#process">Qualification</a>
+      <a href="#what-you-get">What you get</a>
+    </nav>
   </div>
 
-  <section class="block">
-    <div class="block-head">
+  <section class="row" id="client-results">
+    <div class="row-head">
+      <span class="idx">01</span>
       <span class="label">Client results</span>
       <h2>Campaign results in the last few weeks</h2>
+      <p class="lede">Numbers from active client campaigns.</p>
     </div>
-    <div class="results">
-      <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">closed deals</span></span><span class="what">$5K offer · $25K revenue in a week <span class="roi">733% ROI</span></span></div>
-      <div class="result"><span class="who">Campus Crew</span><span class="big"><span class="num">26</span><span class="time">in 20 days</span></span><span class="what">Meetings booked</span></div>
-      <div class="result hot"><span class="who">RGR Marketing</span><span class="big"><span class="num">3</span><span class="time">in 3 days</span></span><span class="what">Meetings booked</span></div>
-    </div>
-    <h3 class="avg-h">Our clients average</h3>
-    <div class="expect">
-      <div><span>First month</span><strong>5–15</strong><small>qualified meetings</small></div>
-      <div><span>Following months</span><strong>20–40</strong><small>meetings on average</small></div>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="block-head">
-      <span class="label">Live campaigns</span>
-      <h2>Interested replies from live campaigns</h2>
-      <p class="lede">Real replies from prospects, sent straight to our clients' Slack.</p>
-    </div>
-    <div class="feed-wrap">
-      <div class="feed-top"><span class="live"><i></i>Live</span><span># positive-replies-rgr-marketing</span></div>
-      <div class="feed" aria-label="Interested replies">
-        <div class="feed-track" id="feed-track">
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Larry M. (Independence Home Loans)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, sounds good. Yes, send any leads my way.”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Ivan G. (HG Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Good to hear from you. Please send over the calculator and I&#x27;ll take a look at it.”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Kristen C. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure! Thank you!”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 16</span></div><p class="alert">🔥 <strong>Positive reply – Lisa G. (Ethos Lending)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure, let&#x27;s see it. :)”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 13</span></div><p class="alert">🔥 <strong>Positive reply – David O. (ProLending Home Finance)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks and have a great day!”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Paul A. (NEW Cornerstone Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure send it for me to look at”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Jill S. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, thanks, Casey! 🌟”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Mike S. (Coastline Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks”</p></div></div></div>
-          <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Max U. (Stellar Mortgage Corp)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure”</p></div></div></div>
+    <div class="row-body">
+      <div class="results">
+        <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">closed deals</span></span><span class="what">$5K offer · $25K revenue in a week <span class="roi">733% ROI</span></span></div>
+        <div class="result"><span class="who">Campus Crew</span><span class="big"><span class="num">26</span><span class="time">in 20 days</span></span><span class="what">Meetings booked</span></div>
+        <div class="result hot"><span class="who">RGR Marketing</span><span class="big"><span class="num">3</span><span class="time">in 3 days</span></span><span class="what">Meetings booked</span></div>
+      </div>
+      <div class="avg">
+        <span class="avg-h">Our clients average</span>
+        <div class="expect">
+          <div><span>First month</span><strong>5–15</strong><small>qualified meetings</small></div>
+          <div><span>Following months</span><strong>20–40</strong><small>meetings on average</small></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="block">
-    <div class="block-head">
+  <section class="row" id="live-replies">
+    <div class="row-head">
+      <span class="idx">02</span>
+      <span class="label">Live campaigns</span>
+      <h2>Interested replies from live campaigns</h2>
+      <p class="lede">Real replies from prospects, sent straight to our clients' Slack.</p>
+    </div>
+    <div class="row-body">
+      <div class="feed-wrap">
+        <div class="feed-top"><span class="live"><i></i>Live</span><span># positive-replies-rgr-marketing</span></div>
+        <div class="feed" aria-label="Interested replies">
+          <div class="feed-track" id="feed-track">
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Larry M. (Independence Home Loans)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, sounds good. Yes, send any leads my way.”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Ivan G. (HG Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Good to hear from you. Please send over the calculator and I&#x27;ll take a look at it.”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Kristen C. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure! Thank you!”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 16</span></div><p class="alert">🔥 <strong>Positive reply – Lisa G. (Ethos Lending)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure, let&#x27;s see it. :)”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 13</span></div><p class="alert">🔥 <strong>Positive reply – David O. (ProLending Home Finance)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks and have a great day!”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Paul A. (NEW Cornerstone Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure send it for me to look at”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Jill S. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, thanks, Casey! 🌟”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Mike S. (Coastline Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks”</p></div></div></div>
+            <div class="reply"><div class="slack"><img class="av" src="logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Max U. (Stellar Mortgage Corp)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure”</p></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row" id="process">
+    <div class="row-head">
+      <span class="idx">03</span>
       <span class="label">Our process</span>
       <h2>Our qualification system</h2>
       <p class="lede">Every prospect is vetted before they reach your calendar.</p>
     </div>
-    <ol class="qual">
-      <li><span class="n">1</span><div><h3>Interested prospects apply</h3><p>Only people who raise their hand and apply move forward.</p></div></li>
-      <li><span class="n">2</span><div><h3>We triage every lead</h3><p>Each one is screened by phone to confirm fit before anything is booked.</p></div></li>
-      <li><span class="n">3</span><div><h3>A personalized video, made for you</h3><p>Before the meeting, each prospect gets a custom video explaining your offer, the purpose of the call, and whether they're the right fit.</p></div></li>
-    </ol>
-    <div class="qual-out">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#1764f0"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      You only speak with prospects who are interested, informed and qualified.
+    <div class="row-body">
+      <ol class="qual">
+        <li><span class="n">1</span><div><h3>Interested prospects apply</h3><p>Only people who raise their hand and apply move forward.</p></div></li>
+        <li><span class="n">2</span><div><h3>We triage every lead</h3><p>Each one is screened by phone to confirm fit before anything is booked.</p></div></li>
+        <li><span class="n">3</span><div><h3>A personalized video, made for you</h3><p>Before the meeting, each prospect gets a custom video explaining your offer, the purpose of the call, and whether they're the right fit.</p></div></li>
+      </ol>
+      <div class="qual-out">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#1764f0"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        You only speak with prospects who are interested, informed and qualified.
+      </div>
     </div>
   </section>
 
-  <section class="block">
-    <div class="block-head">
+  <section class="row" id="what-you-get">
+    <div class="row-head">
+      <span class="idx">04</span>
       <span class="label">What you get</span>
       <h2>Built around your close rate</h2>
+      <p class="lede">Simple pricing, fast follow-up, full visibility.</p>
     </div>
-    <div class="gets">
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15M13.5 5.5H8.25a2.25 2.25 0 0 0 0 4.5h3.5a2.25 2.25 0 0 1 0 4.5H6" stroke="#1764f0" stroke-width="1.8" stroke-linecap="round"/></svg></span><strong>Pay per meeting, no retainer</strong></div>
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4.5 3h3l1.5 4-2 1.25a9 9 0 0 0 4.75 4.75L13 11l4 1.5v3A1.5 1.5 0 0 1 15.5 17 12.5 12.5 0 0 1 3 4.5 1.5 1.5 0 0 1 4.5 3Z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every reply called within 1–3 minutes</strong></div>
-      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3.5 4.5h13v9h-7l-4 3v-3h-2z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every positive reply in your own Slack channel</strong></div>
+    <div class="row-body">
+      <div class="gets">
+        <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15M13.5 5.5H8.25a2.25 2.25 0 0 0 0 4.5h3.5a2.25 2.25 0 0 1 0 4.5H6" stroke="#1764f0" stroke-width="1.8" stroke-linecap="round"/></svg></span><strong>Pay per meeting, no retainer</strong></div>
+        <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4.5 3h3l1.5 4-2 1.25a9 9 0 0 0 4.75 4.75L13 11l4 1.5v3A1.5 1.5 0 0 1 15.5 17 12.5 12.5 0 0 1 3 4.5 1.5 1.5 0 0 1 4.5 3Z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every reply called within 1–3 minutes</strong></div>
+        <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3.5 4.5h13v9h-7l-4 3v-3h-2z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every positive reply in your own Slack channel</strong></div>
+      </div>
     </div>
   </section>
 
@@ -288,7 +337,6 @@ footer a { color: var(--muted); }
     <span>Casey Hayward, Founder · © 2026 growleads.ca</span>
   </footer>
 
-</div>
 <div class="toast" id="toast" role="status" aria-live="polite"><b>✓</b> Email ready. Hit send and Casey will shoot you your TAM audit in the next few minutes.</div>
 <script>
 // After an audit button is clicked, confirm what happens next
