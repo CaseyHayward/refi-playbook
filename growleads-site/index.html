@@ -140,6 +140,11 @@ section.block { padding-block: 64px 0; }
 .cta-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 440px; margin-top: 10px; position: relative; }
 .cta .email-line { font-size: 0.88rem; }
 .cta .email-line a { color: #cfe0ff; }
+.cta-badge { position: relative; display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(127,176,255,.16); color: #9cc2ff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.cta .sent { position: relative; padding: 10px 16px; border-radius: 10px; background: rgba(24,178,107,.15); color: #7ee2b0; font-weight: 600; font-size: 0.92rem; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 20px); opacity: 0; max-width: calc(100% - 32px); width: max-content; padding: 12px 18px; border-radius: 12px; background: var(--navy); color: #fff; font-weight: 600; font-size: 0.92rem; box-shadow: 0 16px 40px -12px rgba(11,22,38,.5); transition: opacity .25s, transform .25s; z-index: 10; pointer-events: none; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast b { color: #7ee2b0; }
 
 footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--muted); padding-block: 28px 40px; }
 footer .brand { font-size: 0.95rem; }
@@ -184,9 +189,9 @@ footer a { color: var(--muted); }
         <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Book a meeting
       </a>
-      <a class="btn btn-light" href="mailto:Caseyhayward@growleads.ca?subject=Interested%20in%20GrowLeads">
+      <a class="btn btn-light js-audit" href="mailto:Caseyhayward@growleads.ca?subject=Free%20TAM%20audit%20%2B%2090-day%20plan&body=Hey%20Casey%2C%0A%0AI%27d%20like%20my%20free%20TAM%20audit%20and%2090-day%20plan.%20Please%20send%20it%20to%20this%20email.%0A%0AThanks!">
         <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        Email Casey
+        Get a free TAM audit
       </a>
     </div>
   </section>
@@ -261,19 +266,20 @@ footer a { color: var(--muted); }
   </section>
 
   <section class="cta" id="contact">
-    <h2>If it looks like a fit, just email me.</h2>
-    <p>Or book a quick call and we'll walk through it together.</p>
+    <span class="cta-badge">Free</span>
+    <h2>Get a free TAM audit and 90-day plan</h2>
+    <p>Made for you and sent straight to your inbox, so we can tell you exactly how many qualified meetings we can get you.</p>
     <div class="cta-actions">
-      <a class="btn btn-primary" href="mailto:Caseyhayward@growleads.ca?subject=Interested%20in%20GrowLeads">
+      <a class="btn btn-primary js-audit" href="mailto:Caseyhayward@growleads.ca?subject=Free%20TAM%20audit%20%2B%2090-day%20plan&body=Hey%20Casey%2C%0A%0AI%27d%20like%20my%20free%20TAM%20audit%20and%2090-day%20plan.%20Please%20send%20it%20to%20this%20email.%0A%0AThanks!">
         <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-        Email Casey
+        Send me my free audit
       </a>
       <a class="btn btn-dark-ghost" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">
         <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Book a meeting
       </a>
     </div>
-    <p class="email-line"><a href="mailto:Caseyhayward@growleads.ca">Caseyhayward@growleads.ca</a></p>
+    <p class="email-line">Opens your email with the message already written. Just hit send.</p>
   </section>
 
   <footer>
@@ -282,7 +288,16 @@ footer a { color: var(--muted); }
   </footer>
 
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"><b>✓</b> Email ready. Hit send and Casey will shoot you your TAM audit in the next few minutes.</div>
 <script>
+// After an audit button is clicked, confirm what happens next
+document.querySelectorAll('.js-audit').forEach(function (a) {
+  a.addEventListener('click', function () {
+    var s = document.getElementById('sent'); if (s) s.hidden = false;
+    var t = document.getElementById('toast'); t.classList.add('show');
+    clearTimeout(window.__toastT); window.__toastT = setTimeout(function () { t.classList.remove('show'); }, 7000);
+  });
+});
 // Duplicate the replies once so the feed loops seamlessly
 (function () {
   var t = document.getElementById('feed-track');
