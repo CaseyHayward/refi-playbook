@@ -1,0 +1,301 @@
+Replace the homepage (/) with the exact design below. Recreate it faithfully as the Index page in React: same layout, copy, colors, DM Sans font, spacing, buttons, links, the auto-scrolling 'Interested replies' feed (infinite loop, pauses on hover), and the video player. Use the asset URLs exactly as written (video, poster, logo, favicon) and set the favicon and page title from the HTML. Remove all the old homepage sections and the Loom embed. Do not change the /book redirect or any other routes. Do not publish.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GrowLeads · Qualified Sales Meetings</title>
+<meta name="description" content="GrowLeads books qualified sales meetings for agencies. Every prospect is vetted before they reach your calendar.">
+<link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+<style>
+:root {
+  --bg: #ffffff;
+  --soft: #f6f8fc;
+  --ink: #0b1626;
+  --body: #3d4a5c;
+  --muted: #6b7889;
+  --line: #e5e9f0;
+  --blue: #1764f0;
+  --blue-dark: #1150c7;
+  --blue-soft: #edf3fe;
+  --navy: #0e1a2e;
+  --font: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font); margin: 0; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 560px; background: linear-gradient(180deg, #f1f5fd 0%, rgba(241,245,253,0) 100%); z-index: -1; }
+.wrap { max-width: 680px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; font-weight: 700; letter-spacing: -0.02em; }
+p { margin: 0; }
+a:focus-visible, video:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
+
+/* Header */
+.top { display: flex; justify-content: space-between; align-items: center; padding-block: 20px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; }
+.brand img { width: 38px; height: 38px; }
+.btn-sm { padding: 9px 16px; font-size: 0.9rem; border-radius: 9px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 22px; border-radius: 10px; font: 600 0.98rem var(--font); text-decoration: none; border: 1px solid transparent; transition: background .15s, border-color .15s, box-shadow .15s; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 1px 2px rgba(11,22,38,.12), 0 6px 16px -6px rgba(23,100,240,.55); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-light { background: #fff; color: var(--ink); border-color: var(--line); box-shadow: 0 1px 2px rgba(11,22,38,.05); }
+.btn-light:hover { border-color: #cdd5e1; }
+.btn-dark-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.22); }
+.btn-dark-ghost:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.4); }
+
+/* Hero */
+.hero { text-align: center; padding-block: 44px 8px; display: grid; gap: 18px; justify-items: center; }
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 0.82rem; font-weight: 600; color: var(--body); }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: #18b26b; box-shadow: 0 0 0 3px rgba(24,178,107,.15); }
+.hero h1 { font-size: clamp(2.1rem, 6.4vw, 3rem); max-width: 15em; }
+.hero h1 span { color: var(--blue); }
+.hero .sub { font-size: 1.1rem; color: var(--body); max-width: 30em; }
+.video { width: 100%; margin-top: 18px; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 24px 60px -28px rgba(11,22,38,.35); }
+.video video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 13px; background: var(--navy); }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+
+/* Sections */
+section.block { padding-block: 64px 0; }
+.label { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+.block h2 { font-size: 1.65rem; }
+.block .lede { color: var(--muted); margin-top: 8px; }
+.block-head { margin-bottom: 22px; }
+
+/* Results */
+.results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.result { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 18px; display: grid; gap: 8px; align-content: start; box-shadow: 0 1px 2px rgba(11,22,38,.04); }
+.result .who { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.result .big { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
+.result .num { font-size: 2.6rem; font-weight: 700; color: var(--ink); letter-spacing: -0.04em; line-height: 1; }
+.result .time { font-size: 1.1rem; font-weight: 700; color: var(--blue); }
+.result .what { font-size: 0.9rem; color: var(--body); padding-top: 8px; border-top: 1px solid var(--line); }
+.result.hot { background: var(--navy); border-color: var(--navy); box-shadow: 0 18px 40px -20px rgba(11,22,38,.6); }
+.result.hot .who { color: #9fb2cf; }
+.result.hot .num { color: #fff; }
+.result.hot .time { color: #7fb0ff; }
+.result.hot .what { color: #c9d5e8; border-color: rgba(255,255,255,.12); }
+
+/* Expect */
+.expect { margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); background: var(--blue-soft); border-radius: 16px; overflow: hidden; }
+.expect div { padding: 18px 20px; display: grid; gap: 2px; }
+.expect div + div { border-left: 1px solid #d6e3fb; }
+.expect span { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+.expect strong { font-size: 1.25rem; letter-spacing: -0.01em; }
+.expect small { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+
+/* Live replies feed */
+.feed-wrap { position: relative; border: 1px solid var(--line); border-radius: 20px; background: var(--soft); padding: 0 14px; }
+.feed-top { display: flex; justify-content: space-between; align-items: center; padding: 14px 4px 10px; font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+.live { display: inline-flex; align-items: center; gap: 7px; color: #12955a; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.74rem; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: #18b26b; animation: pulse 1.6s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(24,178,107,.55); } 100% { box-shadow: 0 0 0 9px rgba(24,178,107,0); } }
+.feed { height: 360px; overflow: hidden; -webkit-mask-image: linear-gradient(transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(transparent 0, #000 14%, #000 86%, transparent 100%); }
+.feed-track { animation: feedUp 34s linear infinite; }
+.feed:hover .feed-track { animation-play-state: paused; }
+@keyframes feedUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+.reply { padding-bottom: 10px; }
+.reply-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: 0 1px 2px rgba(11,22,38,.04); display: grid; gap: 6px; }
+.reply-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.8rem; }
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; background: #fff3ea; color: #c2410c; font-weight: 700; }
+.reply-when { color: var(--muted); }
+.reply-quote { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.45; }
+.reply-who { font-size: 0.85rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .feed { height: auto; max-height: 420px; overflow: auto; } .feed-track { animation: none; } .live i { animation: none; } }
+
+.slack { display: grid; grid-template-columns: 36px 1fr; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(11,22,38,.04); }
+.slack .av { width: 36px; height: 36px; border-radius: 8px; background: #fff; border: 1px solid var(--line); padding: 3px; }
+.msg { min-width: 0; display: grid; gap: 2px; font-size: 0.92rem; color: #1d1c1d; }
+.msg-head { display: flex; gap: 8px; align-items: baseline; font-size: 0.9rem; }
+.msg-head span { font-size: 0.75rem; color: #868686; }
+.msg .alert { margin-bottom: 2px; }
+.msg .line { color: #333; }
+.msg .line b { font-weight: 600; }
+/* Qualification */
+.qual { list-style: none; margin: 0; padding: 0; position: relative; }
+.qual li { display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding-bottom: 22px; position: relative; }
+.qual li:not(:last-child)::before { content: ""; position: absolute; left: 19px; top: 40px; bottom: 0; width: 2px; background: var(--line); }
+.qual .n { width: 40px; height: 40px; border-radius: 12px; background: var(--blue-soft); color: var(--blue); font-weight: 700; display: grid; place-items: center; }
+.qual h3 { font-size: 1.05rem; letter-spacing: -0.01em; padding-top: 8px; }
+.qual p { color: var(--body); font-size: 0.95rem; margin-top: 4px; }
+.qual-out { display: flex; gap: 12px; align-items: center; padding: 16px 18px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); font-weight: 600; }
+.qual-out svg { width: 22px; height: 22px; flex: none; }
+
+/* What you get */
+.gets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.get { border: 1px solid var(--line); border-radius: 16px; padding: 20px 18px; display: grid; gap: 12px; align-content: start; }
+.get .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--blue-soft); display: grid; place-items: center; }
+.get .ic svg { width: 19px; height: 19px; }
+.get strong { font-size: 0.98rem; line-height: 1.35; }
+
+/* CTA */
+.cta { margin-top: 72px; background: var(--navy); color: #fff; border-radius: 22px; padding: 44px 28px; display: grid; gap: 14px; text-align: center; justify-items: center; position: relative; overflow: hidden; }
+.cta::after { content: ""; position: absolute; width: 420px; height: 420px; right: -160px; top: -220px; background: radial-gradient(circle, rgba(23,100,240,.45), rgba(23,100,240,0) 65%); pointer-events: none; }
+.cta h2 { font-size: clamp(1.6rem, 4.6vw, 2rem); position: relative; }
+.cta p { color: #a9b8cf; position: relative; }
+.cta-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 440px; margin-top: 10px; position: relative; }
+.cta .email-line { font-size: 0.88rem; }
+.cta .email-line a { color: #cfe0ff; }
+
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--muted); padding-block: 28px 40px; }
+footer .brand { font-size: 0.95rem; }
+footer .brand img { width: 26px; height: 26px; }
+footer a { color: var(--muted); }
+
+@media (max-width: 600px) {
+  .hero { padding-top: 28px; }
+  section.block { padding-top: 52px; }
+  .results, .gets { grid-template-columns: 1fr; gap: 10px; }
+  .result { grid-template-columns: 1fr auto; align-items: center; padding: 16px 18px; gap: 4px 12px; }
+  .result .who { grid-column: 1 / -1; }
+  .result .what { grid-column: 1 / -1; }
+  .get { grid-template-columns: 38px 1fr; align-items: center; padding: 14px 16px; }
+  .cta-actions { grid-template-columns: 1fr; }
+  .hero-actions { width: 100%; }
+  .hero-actions .btn { flex: 1 1 100%; }
+  .top .btn-sm { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="https://growleads.ca/"><img src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt="">GrowLeads</a>
+    <a class="btn btn-primary btn-sm" href="#contact">Book a call</a>
+  </header>
+
+  <section class="hero">
+    <span class="pill"><i></i>Appointment setting for agencies</span>
+    <h1>Qualified sales meetings on your calendar. <span>You just close.</span></h1>
+    <p class="sub">We find, vet and book prospects who are ready to talk. You only pay per meeting.</p>
+    <div class="video">
+      <video controls playsinline preload="metadata" poster="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/owen-poster.jpg">
+        <source src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/owen-video.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Book a meeting
+      </a>
+      <a class="btn btn-light" href="mailto:Caseyhayward@growleads.ca?subject=Interested%20in%20GrowLeads">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        Email Casey
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="label">Results</span>
+      <h2>Campaign results in the last few weeks</h2>
+    </div>
+    <div class="results">
+      <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">last week</span></span><span class="what">Closed deals</span></div>
+      <div class="result"><span class="who">Campus Crew</span><span class="big"><span class="num">26</span><span class="time">in 20 days</span></span><span class="what">Meetings booked</span></div>
+      <div class="result hot"><span class="who">RGR Marketing</span><span class="big"><span class="num">3</span><span class="time">in 3 days</span></span><span class="what">Meetings booked</span></div>
+    </div>
+    <div class="expect">
+      <div><span>First month</span><strong>5–15</strong><small>qualified meetings</small></div>
+      <div><span>Following months</span><strong>20–40</strong><small>meetings on average</small></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="label">Live campaigns</span>
+      <h2>Interested replies from live campaigns</h2>
+      <p class="lede">Real replies from prospects, sent straight to our clients' Slack.</p>
+    </div>
+    <div class="feed-wrap">
+      <div class="feed-top"><span class="live"><i></i>Live</span><span># positive-replies-rgr-marketing</span></div>
+      <div class="feed" aria-label="Interested replies">
+        <div class="feed-track" id="feed-track">
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Larry M. (Independence Home Loans)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, sounds good. Yes, send any leads my way.”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Ivan G. (HG Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Good to hear from you. Please send over the calculator and I&#x27;ll take a look at it.”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 9</span></div><p class="alert">🔥 <strong>Positive reply – Kristen C. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure! Thank you!”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 16</span></div><p class="alert">🔥 <strong>Positive reply – Lisa G. (Ethos Lending)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure, let&#x27;s see it. :)”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 13</span></div><p class="alert">🔥 <strong>Positive reply – David O. (ProLending Home Finance)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks and have a great day!”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Paul A. (NEW Cornerstone Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure send it for me to look at”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Jill S. (Excel Mortgage Brokers)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Yes, thanks, Casey! 🌟”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 12</span></div><p class="alert">🔥 <strong>Positive reply – Mike S. (Coastline Mortgage)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure. Thanks”</p></div></div></div>
+          <div class="reply"><div class="slack"><img class="av" src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt=""><div class="msg"><div class="msg-head"><strong>Casey Hayward</strong><span>Oct 2026</span></div><p class="alert">🔥 <strong>Positive reply – Max U. (Stellar Mortgage Corp)</strong></p><p class="line"><b>Campaign:</b> RGR Marketing | Mortgage</p><p class="line"><b>Reply:</b> “Sure”</p></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="label">Our process</span>
+      <h2>Our qualification system</h2>
+      <p class="lede">Every prospect is vetted before they reach your calendar.</p>
+    </div>
+    <ol class="qual">
+      <li><span class="n">1</span><div><h3>Interested prospects apply</h3><p>Only people who raise their hand and apply move forward.</p></div></li>
+      <li><span class="n">2</span><div><h3>We triage every lead</h3><p>Each one is screened by phone to confirm fit before anything is booked.</p></div></li>
+      <li><span class="n">3</span><div><h3>A personalized video, made for you</h3><p>Before the meeting, each prospect gets a custom video explaining your offer, the purpose of the call, and whether they're the right fit.</p></div></li>
+    </ol>
+    <div class="qual-out">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#1764f0"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      You only speak with prospects who are interested, informed and qualified.
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="label">What you get</span>
+      <h2>Built around your close rate</h2>
+    </div>
+    <div class="gets">
+      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5v15M13.5 5.5H8.25a2.25 2.25 0 0 0 0 4.5h3.5a2.25 2.25 0 0 1 0 4.5H6" stroke="#1764f0" stroke-width="1.8" stroke-linecap="round"/></svg></span><strong>Pay per meeting, no retainer</strong></div>
+      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4.5 3h3l1.5 4-2 1.25a9 9 0 0 0 4.75 4.75L13 11l4 1.5v3A1.5 1.5 0 0 1 15.5 17 12.5 12.5 0 0 1 3 4.5 1.5 1.5 0 0 1 4.5 3Z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every reply called within 1–3 minutes</strong></div>
+      <div class="get"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3.5 4.5h13v9h-7l-4 3v-3h-2z" stroke="#1764f0" stroke-width="1.7" stroke-linejoin="round"/></svg></span><strong>Every positive reply in your own Slack channel</strong></div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <h2>If it looks like a fit, just email me.</h2>
+    <p>Or book a quick call and we'll walk through it together.</p>
+    <div class="cta-actions">
+      <a class="btn btn-primary" href="mailto:Caseyhayward@growleads.ca?subject=Interested%20in%20GrowLeads">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m3 5.5 7 5.5 7-5.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        Email Casey
+      </a>
+      <a class="btn btn-dark-ghost" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2zTe0hl7OGO-vgpG7xvkMyd9lEvLJUvweAK558T7fqQfpeHZRZsGodehd-CndkWkHwwrWeWnQ7" target="_blank" rel="noopener">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Book a meeting
+      </a>
+    </div>
+    <p class="email-line"><a href="mailto:Caseyhayward@growleads.ca">Caseyhayward@growleads.ca</a></p>
+  </section>
+
+  <footer>
+    <a class="brand" href="https://growleads.ca/"><img src="https://cdn.jsdelivr.net/gh/CaseyHayward/refi-playbook@61f120f17c6e790c24984e720ed12a083fd71876/growleads-site/logo.png" alt="">GrowLeads</a>
+    <span>Casey Hayward, Founder · © 2026 growleads.ca</span>
+  </footer>
+
+</div>
+<script>
+// Duplicate the replies once so the feed loops seamlessly
+(function () {
+  var t = document.getElementById('feed-track');
+  if (!t) return;
+  Array.prototype.slice.call(t.children).forEach(function (el) {
+    var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); t.appendChild(c);
+  });
+})();
+</script>
+</body>
+</html>
+
+```
