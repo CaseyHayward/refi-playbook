@@ -81,7 +81,9 @@ section.block { padding-block: 64px 0; }
 .result.hot .what { color: #c9d5e8; border-color: rgba(255,255,255,.12); }
 
 /* Expect */
-.expect { margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); background: var(--blue-soft); border-radius: 16px; overflow: hidden; }
+.avg-h { font-size: 1rem; margin: 28px 0 10px; }
+.result .roi { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 999px; background: #e7f8ef; color: #0f7a47; font-weight: 700; font-size: 0.85rem; }
+.expect { margin-top: 0; display: grid; grid-template-columns: repeat(2, 1fr); background: var(--blue-soft); border-radius: 16px; overflow: hidden; }
 .expect div { padding: 18px 20px; display: grid; gap: 2px; }
 .expect div + div { border-left: 1px solid #d6e3fb; }
 .expect span { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
@@ -200,10 +202,11 @@ footer a { color: var(--muted); }
       <h2>Campaign results in the last few weeks</h2>
     </div>
     <div class="results">
-      <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">last week</span></span><span class="what">Closed deals</span></div>
+      <div class="result"><span class="who">Morotech</span><span class="big"><span class="num">5</span><span class="time">closed deals</span></span><span class="what">$5K offer · $25K revenue on a $3K fee <span class="roi">733% ROI</span></span></div>
       <div class="result"><span class="who">Campus Crew</span><span class="big"><span class="num">26</span><span class="time">in 20 days</span></span><span class="what">Meetings booked</span></div>
       <div class="result hot"><span class="who">RGR Marketing</span><span class="big"><span class="num">3</span><span class="time">in 3 days</span></span><span class="what">Meetings booked</span></div>
     </div>
+    <h3 class="avg-h">Our clients average</h3>
     <div class="expect">
       <div><span>First month</span><strong>5–15</strong><small>qualified meetings</small></div>
       <div><span>Following months</span><strong>20–40</strong><small>meetings on average</small></div>
